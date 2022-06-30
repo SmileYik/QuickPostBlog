@@ -1,0 +1,17 @@
+package tk.smileyik.quickpost;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+@EnableConfigurationProperties
+@ConfigurationPropertiesScan("tk.smileyik.quickpost.config")
+@SpringBootApplication
+public class QuickPostApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(QuickPostApplication.class, args);
+  }
+
+}
