@@ -46,6 +46,11 @@ public class BlogConfiguration {
    */
   private int prevLength = 100;
 
+  /**
+   * 进行管理如发表文章的token.
+   */
+  private String adminToken = "123456";
+
   public String getRoot() {
     return root;
   }
@@ -114,6 +119,14 @@ public class BlogConfiguration {
 
   public int getPrevLength() {
     return prevLength;
+  }
+
+  public void setAdminToken(String adminToken) {
+    this.adminToken = adminToken;
+  }
+
+  public String getAdminToken() {
+    return adminToken;
   }
 
   @Override
