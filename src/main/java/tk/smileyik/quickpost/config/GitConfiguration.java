@@ -13,4 +13,21 @@ import org.springframework.stereotype.Component;
 public class GitConfiguration {
   private String remote;
 
+  private String repository;
+
+  public String getRemote() {
+    return remote;
+  }
+
+  public String getRepository() {
+    return repository;
+  }
+
+  public void setRemote(String remote) {
+    this.remote = remote;
+  }
+
+  public void setRepository(String repository) {
+    this.repository = repository;
+  }
 }

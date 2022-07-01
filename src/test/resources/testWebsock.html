@@ -1,0 +1,15 @@
+<body>
+<div id="abc">
+
+</div>
+<script>
+    var ws = new WebSocket("ws://localhost:8081/123456")
+    ws.onopen = function () {
+        console.log("open")
+    }
+
+    ws.onmessage = function (message) {
+        console.log(message)
+    }
+</script>
+</body>
