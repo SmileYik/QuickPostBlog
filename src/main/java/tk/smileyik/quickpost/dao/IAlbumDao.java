@@ -3,8 +3,6 @@ package tk.smileyik.quickpost.dao;
 import tk.smileyik.quickpost.entity.Album;
 import tk.smileyik.quickpost.entity.Item;
 
-import java.io.File;
-
 public interface IAlbumDao {
   /**
    * 通过文章集id和博客id来获取一个文章集。

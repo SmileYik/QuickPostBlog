@@ -1,6 +1,5 @@
 package tk.smileyik.quickpost.dao;
 
-import org.springframework.stereotype.Component;
 import tk.smileyik.quickpost.entity.SimpleAlbum;
 
 import java.util.List;

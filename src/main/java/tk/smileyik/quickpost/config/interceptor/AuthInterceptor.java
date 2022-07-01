@@ -3,7 +3,7 @@ package tk.smileyik.quickpost.config.interceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import tk.smileyik.quickpost.config.BlogConfiguration;
+import tk.smileyik.quickpost.config.AuthConfiguration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,11 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 @Component("authInterceptor")
 public class AuthInterceptor implements HandlerInterceptor {
 
-  private BlogConfiguration blogConfiguration;
+  private AuthConfiguration authConfiguration;
 
   @Autowired
-  public void setBlogConfiguration(BlogConfiguration blogConfiguration) {
-    this.blogConfiguration = blogConfiguration;
+  public void setAuthConfiguration(AuthConfiguration authConfiguration) {
+    this.authConfiguration = authConfiguration;
   }
 
   @Override
@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                            HttpServletResponse response,
                            Object handler) throws Exception {
     String token = request.getHeader("TOKEN");
-    boolean flag = blogConfiguration.getAdminToken().equals(token);
+    boolean flag = authConfiguration.getAdminToken().equals(token);
     if (!flag) {
       response.sendError(404);
     }
