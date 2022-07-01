@@ -11,5 +11,11 @@ import java.util.List;
  * @date 2022年06月30日 17:04
  */
 public interface ISimpleAlbumDao {
+  /**
+   * 获取博客下所有文章集概要.
+   *
+   * @param blog 博客id
+   * @return 该博客下的所有文章集概要
+   */
   List<SimpleAlbum> getAllSimpleAlbums(String blog);
 }

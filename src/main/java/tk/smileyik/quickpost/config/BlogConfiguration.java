@@ -1,9 +1,13 @@
 package tk.smileyik.quickpost.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author SmileYik
@@ -13,11 +17,34 @@ import org.springframework.stereotype.Component;
 @Component("blogConfiguration")
 @ConfigurationProperties("quick-post.blog")
 public class BlogConfiguration {
+  /**
+   * 博客根目录.
+   *
+   * <p>
+   *   非博客项目目录， 是放置博客文章的目录.
+   * </p>
+   */
   private String root = "blogs";
+  /**
+   * 放置markdown文章目录.
+   */
   private String markdownBase = "markdowns";
+  /**
+   * 放置文章集信息目录.
+   */
   private String markdownAlbumsBase = "albums";
+  /**
+   * 最新发表文章文件名.
+   */
   private String newestPost = "newest-post.json";
+  /**
+   * 博客中所有文章集概要.
+   */
   private String albums = "all-albums.json";
+  /**
+   * 文章预览字数.
+   */
+  private int prevLength = 100;
 
   public String getRoot() {
     return root;
@@ -73,6 +100,20 @@ public class BlogConfiguration {
 
   public String getAllAlbums(String blog) {
     return String.format("%s/%s/%s", root, blog, albums);
+  }
+
+  public List<String> getBlogs() {
+    return Arrays.stream(Objects.requireNonNull(
+        Paths.get(root).toFile().list()
+    )).collect(Collectors.toList());
+  }
+
+  public void setPrevLength(int prevLength) {
+    this.prevLength = prevLength;
+  }
+
+  public int getPrevLength() {
+    return prevLength;
   }
 
   @Override

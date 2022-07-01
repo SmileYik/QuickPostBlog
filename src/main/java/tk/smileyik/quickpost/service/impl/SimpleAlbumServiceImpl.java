@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2022年06月30日 17:32
  */
 @Service
-public class SimpleAlbumService implements ISimpleAlbumService {
+public class SimpleAlbumServiceImpl implements ISimpleAlbumService {
   private ISimpleAlbumDao simpleAlbumDao;
 
   @Autowired
