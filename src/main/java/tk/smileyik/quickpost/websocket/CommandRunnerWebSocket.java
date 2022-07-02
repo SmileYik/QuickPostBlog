@@ -22,11 +22,8 @@ import java.util.TimerTask;
  */
 @Log4j2
 @Component
-@ServerEndpoint("/cmd/{token}/npmDeploy")
-public class NpmDeployWebSocket {
-  private AuthConfiguration authConfiguration;
-  private ExecConfiguration execConfiguration;
-  private GitConfiguration  gitConfiguration;
+@ServerEndpoint("/cmd/{token}/{command}")
+public class CommandRunnerWebSocket {
   private Session session;
   private Process exec;
   private BufferedReader info;
@@ -37,10 +34,16 @@ public class NpmDeployWebSocket {
   private LogReporter errorReporter;
 
   @OnOpen
-  public void onOpen(Session session, @PathParam("token") String token) throws IOException {
-    authConfiguration = BeanUtil.getBean(AuthConfiguration.class);
-    execConfiguration = BeanUtil.getBean(ExecConfiguration.class);
-    gitConfiguration  = BeanUtil.getBean(GitConfiguration.class);
+  public void onOpen(
+      Session session,
+      @PathParam("token") String token,
+      @PathParam("command") String command
+  ) throws IOException {
+
+    AuthConfiguration authConfiguration = BeanUtil.getBean(AuthConfiguration.class);
+    ExecConfiguration execConfiguration = BeanUtil.getBean(ExecConfiguration.class);
+    GitConfiguration gitConfiguration = BeanUtil.getBean(GitConfiguration.class);
+
     if (!authConfiguration.getAdminToken().equals(token)) {
       log.info("Token不正确， 停止连接。");
       session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "i can not accept it!!!!"));
@@ -53,8 +56,8 @@ public class NpmDeployWebSocket {
         new File(gitConfiguration.getRepository())
     );
     OutputStream outputStream = exec.getOutputStream();
-    log.info("运行如下指令：\n" + execConfiguration.getNpmDeployCommand());
-    outputStream.write(execConfiguration.getNpmDeployCommand().getBytes(StandardCharsets.UTF_8));
+    log.info("运行如下指令：\n" + execConfiguration.getCommand(command));
+    outputStream.write(execConfiguration.getCommand(command).getBytes(StandardCharsets.UTF_8));
     outputStream.flush();
     // 开始准备输出日志.
     info = new BufferedReader(new InputStreamReader(exec.getInputStream(), StandardCharsets.UTF_8));
