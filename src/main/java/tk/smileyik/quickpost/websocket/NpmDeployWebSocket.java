@@ -2,26 +2,28 @@ package tk.smileyik.quickpost.websocket;
 
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Level;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tk.smileyik.quickpost.config.AuthConfiguration;
 import tk.smileyik.quickpost.config.ExecConfiguration;
 import tk.smileyik.quickpost.config.GitConfiguration;
+import tk.smileyik.quickpost.util.BeanUtil;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author SmileYik
  * @Description TODO
  * @date 2022年07月01日 16:39
  */
+@Log4j2
 @Component
-@ServerEndpoint("/{token}")
+@ServerEndpoint("/cmd/{token}/npmDeploy")
 public class NpmDeployWebSocket {
   private AuthConfiguration authConfiguration;
   private ExecConfiguration execConfiguration;
@@ -35,27 +37,14 @@ public class NpmDeployWebSocket {
   private LogReporter infoReporter;
   private LogReporter errorReporter;
 
-
-  @Autowired
-  public void setAuthConfiguration(AuthConfiguration authConfiguration) {
-    this.authConfiguration = authConfiguration;
-  }
-
-  @Autowired
-  public void setExecConfiguration(ExecConfiguration execConfiguration) {
-    this.execConfiguration = execConfiguration;
-  }
-
-  @Autowired
-  public void setGitConfiguration(GitConfiguration gitConfiguration) {
-    this.gitConfiguration = gitConfiguration;
-  }
-
   @OnOpen
   public void onOpen(Session session, @PathParam("token") String token) throws IOException {
+    authConfiguration = BeanUtil.getBean(AuthConfiguration.class);
+    execConfiguration = BeanUtil.getBean(ExecConfiguration.class);
+    gitConfiguration  = BeanUtil.getBean(GitConfiguration.class);
     if (!authConfiguration.getAdminToken().equals(token)) {
+      log.info("Token不正确， 停止连接。");
       session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "i can not accept it!!!!"));
-      System.out.println("failed!");
       return;
     }
     this.session = session;
@@ -65,9 +54,10 @@ public class NpmDeployWebSocket {
         new File(gitConfiguration.getRepository())
     );
     OutputStream outputStream = exec.getOutputStream();
+    log.info("运行如下指令：\n" + execConfiguration.getNpmDeployCommand());
     outputStream.write(execConfiguration.getNpmDeployCommand().getBytes(StandardCharsets.UTF_8));
     outputStream.flush();
-    outputStream.close();
+    // 开始准备输出日志.
     info = new BufferedReader(new InputStreamReader(exec.getInputStream(), StandardCharsets.UTF_8));
     error = new BufferedReader(new InputStreamReader(exec.getErrorStream(), StandardCharsets.UTF_8));
     infoReporter = new LogReporter(info);
@@ -76,7 +66,26 @@ public class NpmDeployWebSocket {
     errorThread = new Thread(errorReporter);
     infoThread.start();
     errorThread.start();
-    System.out.println("connect!");
+    // 如果输出流都停止了工作那么就关闭连接
+    new Timer().schedule(new TimerTask() {
+      @Override
+      public void run() {
+        if (!infoThread.isAlive() && !errorThread.isAlive()) {
+          try {
+            try {
+              session.close();
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+            shutdownReport();
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          } finally {
+            cancel();
+          }
+        }
+      }
+    }, 1000L, 1000L);
   }
 
   @OnClose
@@ -99,7 +108,13 @@ public class NpmDeployWebSocket {
     }
   }
 
+  @OnMessage
+  public void onMessage(String msg) {
+
+  }
+
   private void shutdownReport() throws IOException {
+    log.info("指令执行完毕， 关闭连接。");
     if (info != null) {
       infoReporter.setContinueReport(false);
       infoThread = null;
@@ -118,7 +133,16 @@ public class NpmDeployWebSocket {
   }
 
   private void sendMessage(String text) {
-    session.getAsyncRemote().sendText(text);
+    try {
+      session.getBasicRemote().sendText(text);
+    } catch (IOException e) {
+      e.printStackTrace();
+      try {
+        shutdownReport();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   private class LogReporter implements Runnable {

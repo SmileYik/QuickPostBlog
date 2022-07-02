@@ -3,13 +3,13 @@
 
 </div>
 <script>
-    var ws = new WebSocket("ws://localhost:8081/123456")
+    var ws = new WebSocket("ws://localhost:8081/12356")
     ws.onopen = function () {
         console.log("open")
     }
 
     ws.onmessage = function (message) {
-        console.log(message)
+        console.log(message.data)
     }
 </script>
 </body>
