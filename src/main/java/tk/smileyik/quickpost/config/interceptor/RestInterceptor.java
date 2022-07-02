@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Description TODO
  * @date 2022年07月01日 14:47
  */
+@Deprecated
 @Component("restInterceptor")
 public class RestInterceptor implements HandlerInterceptor {
 
@@ -21,6 +22,8 @@ public class RestInterceptor implements HandlerInterceptor {
                            HttpServletResponse response,
                            Object handler) throws Exception {
     response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "*");
+    response.setHeader("Access-Control-Allow-Headers", "*");
     return true;
   }
 }

@@ -1,10 +1,7 @@
 package tk.smileyik.quickpost.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tk.smileyik.quickpost.entity.SimpleAlbum;
 import tk.smileyik.quickpost.service.ISimpleAlbumService;
 import tk.smileyik.quickpost.util.Result;
@@ -16,6 +13,7 @@ import java.util.List;
  * @Description TODO
  * @date 2022年07月01日 10:46
  */
+@CrossOrigin
 @RestController
 @RequestMapping("simpleAlbum")
 public class SimpleAlbumController {

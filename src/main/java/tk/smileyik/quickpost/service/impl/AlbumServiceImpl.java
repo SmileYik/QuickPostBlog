@@ -8,8 +8,7 @@ import tk.smileyik.quickpost.entity.Item;
 import tk.smileyik.quickpost.service.IAlbumService;
 import tk.smileyik.quickpost.util.Pair;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author SmileYik
@@ -120,6 +119,21 @@ public class AlbumServiceImpl implements IAlbumService {
     } else {
       return target.getKey().getItems().get(target.getValue());
     }
+  }
+
+  @Override
+  public Map<String, Item> getAllItems(String blogId, String albumId) {
+    Album album = albumDao.getAlbumById(blogId, albumId);
+    LinkedList<Item> items = new LinkedList<>(album.getItems());
+    Map<String, Item> map = new HashMap<>();
+    while (!items.isEmpty()) {
+      Item item = items.removeFirst();
+      List<Item> sub = item.getItems();
+      item.setItems(new ArrayList<>());
+      map.put(item.getId(), item);
+      items.addAll(0, sub);
+    }
+    return map;
   }
 }
 

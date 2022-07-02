@@ -27,6 +27,9 @@ public class AuthInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request,
                            HttpServletResponse response,
                            Object handler) throws Exception {
+    if (request.getMethod().equals("OPTIONS")) {
+      return true;
+    }
     String token = request.getHeader("TOKEN");
     boolean flag = authConfiguration.getAdminToken().equals(token);
     if (!flag) {

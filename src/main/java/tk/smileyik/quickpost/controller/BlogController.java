@@ -1,6 +1,7 @@
 package tk.smileyik.quickpost.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
  * @Description TODO
  * @date 2022年07月01日 10:35
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/blog")
 public class BlogController {

@@ -6,11 +6,14 @@ import tk.smileyik.quickpost.entity.Item;
 import tk.smileyik.quickpost.service.IAlbumService;
 import tk.smileyik.quickpost.util.Result;
 
+import java.util.Map;
+
 /**
  * @author SmileYik
  * @Description TODO
  * @date 2022年07月01日 10:52
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/album")
 public class AlbumController {
@@ -32,6 +35,19 @@ public class AlbumController {
       return new Result<>(false, 404, "not found!");
     } else {
       return new Result<>(item);
+    }
+  }
+
+  @GetMapping("{blogId}/{albumId}")
+  public Result<Map<String, Item>> getItems(
+      @PathVariable("blogId") String blogId,
+      @PathVariable("albumId") String albumId
+  ) {
+    Map<String, Item> map = albumService.getAllItems(blogId, albumId);
+    if (map == null) {
+      return new Result<>(false, 404, "not found!");
+    } else {
+      return new Result<>(map);
     }
   }
 

@@ -2,6 +2,7 @@ package tk.smileyik.quickpost.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tk.smileyik.quickpost.config.interceptor.AuthInterceptor;
@@ -14,16 +15,13 @@ import tk.smileyik.quickpost.config.interceptor.RestInterceptor;
  */
 @Configuration
 public class RestInterceptorConfig implements WebMvcConfigurer {
-
-  private final RestInterceptor restInterceptor;
-
-  @Autowired
-  public RestInterceptorConfig(RestInterceptor restInterceptor) {
-    this.restInterceptor = restInterceptor;
-  }
-
   @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(restInterceptor).addPathPatterns("/**");
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+        .allowCredentials(true)
+        .allowedOriginPatterns("*")
+        .allowedMethods("GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS")
+        .allowedHeaders("*")
+        .exposedHeaders("*");
   }
 }
