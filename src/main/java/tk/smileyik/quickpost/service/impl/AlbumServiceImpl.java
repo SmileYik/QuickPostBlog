@@ -122,15 +122,15 @@ public class AlbumServiceImpl implements IAlbumService {
   }
 
   @Override
-  public Map<String, Item> getAllItems(String blogId, String albumId) {
+  public List<Item> getAllItems(String blogId, String albumId) {
     Album album = albumDao.getAlbumById(blogId, albumId);
     LinkedList<Item> items = new LinkedList<>(album.getItems());
-    Map<String, Item> map = new LinkedHashMap<>();
+    List<Item> map = new ArrayList<>();
     while (!items.isEmpty()) {
       Item item = items.removeFirst();
       List<Item> sub = item.getItems();
       item.setItems(new ArrayList<>());
-      map.put(item.getId(), item);
+      map.add(item);
       items.addAll(0, sub);
     }
     return map;

@@ -6,6 +6,7 @@ import tk.smileyik.quickpost.entity.Item;
 import tk.smileyik.quickpost.service.IAlbumService;
 import tk.smileyik.quickpost.util.Result;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,11 +40,11 @@ public class AlbumController {
   }
 
   @GetMapping("{blogId}/{albumId}")
-  public Result<Map<String, Item>> getItems(
+  public Result<List<Item>> getItems(
       @PathVariable("blogId") String blogId,
       @PathVariable("albumId") String albumId
   ) {
-    Map<String, Item> map = albumService.getAllItems(blogId, albumId);
+    List<Item> map = albumService.getAllItems(blogId, albumId);
     if (map == null) {
       return new Result<>(false, 404, "not found!");
     } else {
