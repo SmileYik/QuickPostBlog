@@ -27,4 +27,6 @@ public interface ISimpleAlbumService {
   boolean updateSimpleAlbum(String blog, SimpleAlbum album, String markdown);
 
   boolean deleteSimpleAlbum(String blog, String album);
+
+  String getAlbumMarkdown(String blogId, String albumId);
 }

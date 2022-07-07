@@ -28,6 +28,9 @@ public class ImageDaoImpl implements IImageDao {
   public String saveImage(byte[] bytes, String filename) {
     File imageFile = new File(gitConfiguration.getRepository(), "public");
     String filePath = getFilePath(filename);
+    if (filePath.isEmpty()) {
+      return null;
+    }
     File saveTo = new File(imageFile, filePath);
     File parentFile = saveTo.getParentFile();
     if (!parentFile.exists() && !parentFile.mkdirs()) {
@@ -46,6 +49,9 @@ public class ImageDaoImpl implements IImageDao {
   public boolean deleteImage(String filename) {
     File imageFile = new File(gitConfiguration.getRepository(), "public");
     String filePath = getFilePath(filename);
+    if (filePath.isEmpty()) {
+      return false;
+    }
     File saveTo = new File(imageFile, filePath);
     if (!saveTo.delete()) {
       return false;
@@ -69,6 +75,9 @@ public class ImageDaoImpl implements IImageDao {
    * @return
    */
   private String getFilePath(String filename) {
+    if (filename.length() < 6) {
+      return "";
+    }
     String first = filename.substring(0, 2);
     String second = filename.substring(2, 4);
     String third = filename.substring(4, 6);

@@ -158,4 +158,18 @@ public class SimpleAlbumDaoImpl implements ISimpleAlbumDao {
     }
     return false;
   }
+
+  @Override
+  public String getAlbumMarkdown(String blog, String simpleAlbumId) {
+    File markdownFile = new File(
+        blogConfiguration.getMarkdownAlbumsBase(blog),
+        simpleAlbumId + ".md"
+    );
+    try {
+      return String.join("\n", Files.readAllLines(markdownFile.toPath()));
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

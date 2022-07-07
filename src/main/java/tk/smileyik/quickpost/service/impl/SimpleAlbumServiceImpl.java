@@ -52,4 +52,9 @@ public class SimpleAlbumServiceImpl implements ISimpleAlbumService {
   public boolean deleteSimpleAlbum(String blog, String album) {
     return simpleAlbumDao.deleteSimpleAlbum(blog, album);
   }
+
+  @Override
+  public String getAlbumMarkdown(String blogId, String albumId) {
+    return simpleAlbumDao.getAlbumMarkdown(blogId, albumId);
+  }
 }

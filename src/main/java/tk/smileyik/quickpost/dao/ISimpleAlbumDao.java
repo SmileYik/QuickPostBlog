@@ -25,4 +25,6 @@ public interface ISimpleAlbumDao {
   boolean updateSimpleAlbum(String blog, SimpleAlbum simpleAlbum, String markdown);
 
   boolean deleteSimpleAlbum(String blog, String simpleAlbumId);
+
+  String getAlbumMarkdown(String blog, String simpleAlbumId);
 }

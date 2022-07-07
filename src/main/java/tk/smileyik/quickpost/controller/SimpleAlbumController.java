@@ -37,7 +37,10 @@ public class SimpleAlbumController {
       @PathVariable("blogId") String blogId,
       @PathVariable("albumId") String albumId
   ) {
-    return new Result<>(simpleAlbumService.getSimpleAlbumById(blogId, albumId));
+    return new Result<>(
+        simpleAlbumService.getAlbumMarkdown(blogId, albumId),
+        simpleAlbumService.getSimpleAlbumById(blogId, albumId)
+    );
   }
 
   @DeleteMapping("{blogId}/{albumId}")
