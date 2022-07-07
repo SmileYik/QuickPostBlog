@@ -51,6 +51,7 @@ public class ImageDaoImpl implements IImageDao {
       return false;
     }
 
+    // 迭代三次， 删除多余的文件夹。
     for (int i = 0; i < 3; ++i) {
       File parent = saveTo.getParentFile();
       if (Objects.requireNonNull(parent.listFiles()).length == 0) {
@@ -62,6 +63,11 @@ public class ImageDaoImpl implements IImageDao {
     return saveTo.delete() || !saveTo.exists();
   }
 
+  /**
+   * 根据生成的SHA-256十六进制字符串生成存放路径。
+   * @param filename 对文件进行SHA-256计算后结果的十六进制显示。
+   * @return
+   */
   private String getFilePath(String filename) {
     String first = filename.substring(0, 2);
     String second = filename.substring(2, 4);

@@ -14,7 +14,7 @@ import java.io.IOException;
  * @date 2022年07月07日 11:16
  */
 @RestController
-@RequestMapping("/picture")
+@RequestMapping("/image")
 public class ImageUploadController {
 
   private IImageService imageService;
