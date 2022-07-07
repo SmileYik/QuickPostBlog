@@ -31,6 +31,9 @@ public class AuthInterceptor implements HandlerInterceptor {
       return true;
     }
     String token = request.getHeader("TOKEN");
+    if (token == null) {
+      token = request.getParameter("TOKEN");
+    }
     boolean flag = authConfiguration.getAdminToken().equals(token);
     if (!flag) {
       response.sendError(404);

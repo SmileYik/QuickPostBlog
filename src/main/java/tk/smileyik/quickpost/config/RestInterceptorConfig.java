@@ -1,12 +1,8 @@
 package tk.smileyik.quickpost.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tk.smileyik.quickpost.config.interceptor.AuthInterceptor;
-import tk.smileyik.quickpost.config.interceptor.RestInterceptor;
 
 /**
  * @author SmileYik

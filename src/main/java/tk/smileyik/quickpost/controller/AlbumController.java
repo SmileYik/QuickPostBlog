@@ -7,7 +7,6 @@ import tk.smileyik.quickpost.service.IAlbumService;
 import tk.smileyik.quickpost.util.Result;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author SmileYik
@@ -25,6 +24,13 @@ public class AlbumController {
     this.albumService = albumService;
   }
 
+  /**
+   * 获取某一篇文章的详细信息， 其中prev被所有正文所替代。
+   * @param blogId
+   * @param albumId
+   * @param itemId
+   * @return
+   */
   @GetMapping("{blogId}/{albumId}/{itemId}")
   public Result<Item> getPost(
       @PathVariable("blogId") String blogId,
@@ -39,6 +45,12 @@ public class AlbumController {
     }
   }
 
+  /**
+   * 获取某一文章集下的所有文章信息，prev为正常简要信息。
+   * @param blogId
+   * @param albumId
+   * @return
+   */
   @GetMapping("{blogId}/{albumId}")
   public Result<List<Item>> getItems(
       @PathVariable("blogId") String blogId,
@@ -52,6 +64,15 @@ public class AlbumController {
     }
   }
 
+  /**
+   * 发表一篇新的文章。
+   * @param blogId
+   * @param albumId
+   * @param includeByItem
+   * @param idx
+   * @param item
+   * @return
+   */
   @PostMapping("{blogId}/{albumId}/{includeByItem}/{idx}")
   public Result<Boolean> post(
       @PathVariable("blogId") String blogId,
@@ -64,6 +85,15 @@ public class AlbumController {
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
 
+  /**
+   * 修改一篇文章。
+   * @param blogId
+   * @param albumId
+   * @param includeByItem
+   * @param idx
+   * @param item
+   * @return
+   */
   @PutMapping("{blogId}/{albumId}/{includeByItem}/{idx}")
   public Result<Boolean> modifyPost(
       @PathVariable("blogId") String blogId,
@@ -76,6 +106,13 @@ public class AlbumController {
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
 
+  /**
+   * 修改一篇文章但是不修改这篇文章所在的位置。
+   * @param blogId
+   * @param albumId
+   * @param item
+   * @return
+   */
   @PutMapping("{blogId}/{albumId}")
   public Result<Boolean> modifyPost(
       @PathVariable("blogId") String blogId,
@@ -85,5 +122,16 @@ public class AlbumController {
     boolean flag = albumService.modifyPost(blogId, albumId, item);
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
+
+  @DeleteMapping("{blogId}/{albumId}/{itemId}")
+  public Result<Item> deletePost(
+      @PathVariable("blogId") String blogId,
+      @PathVariable("albumId") String albumId,
+      @PathVariable("itemId") String itemId
+  ) {
+    return new Result<>(albumService.deletePost(blogId, albumId, itemId));
+  }
+
+
 
 }

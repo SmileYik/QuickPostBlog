@@ -21,4 +21,10 @@ public interface ISimpleAlbumService {
    * @return     该博客下的所有文章集概要
    */
   List<SimpleAlbum> getAllSimpleAlbums(String blog);
+
+  boolean addSimpleAlbum(String blog, SimpleAlbum album, String markdown);
+
+  boolean updateSimpleAlbum(String blog, SimpleAlbum album, String markdown);
+
+  boolean deleteSimpleAlbum(String blog, String album);
 }

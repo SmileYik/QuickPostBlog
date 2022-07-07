@@ -8,7 +8,9 @@ import tk.smileyik.quickpost.entity.Item;
 import tk.smileyik.quickpost.service.IAlbumService;
 import tk.smileyik.quickpost.util.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author SmileYik
@@ -112,13 +114,16 @@ public class AlbumServiceImpl implements IAlbumService {
     Album album = albumDao.getAlbumById(blogId, albumId);
     List<Item> itemList = album.getItems();
     Pair<Item, Integer> target = findTarget(itemList, itemId);
+    Item item;
     if (target == null) {
       return null;
     } else if (target.getKey() == null) {
-      return album.getItems().get(target.getValue());
+      item = album.getItems().get(target.getValue());
     } else {
-      return target.getKey().getItems().get(target.getValue());
+      item = target.getKey().getItems().get(target.getValue());
     }
+    albumDao.readMarkdown(blogId, item);
+    return item;
   }
 
   @Override
@@ -134,6 +139,23 @@ public class AlbumServiceImpl implements IAlbumService {
       items.addAll(0, sub);
     }
     return map;
+  }
+
+  @Override
+  public Item deletePost(String blogId, String albumId, String itemId) {
+    Album album = albumDao.getAlbumById(blogId, albumId);
+    List<Item> itemList = album.getItems();
+    Pair<Item, Integer> target = findTarget(itemList, itemId);
+    Item item;
+    if (target == null) {
+      return null;
+    } else if (target.getKey() == null) {
+      item = album.getItems().remove((int) target.getValue());
+    } else {
+      item = target.getKey().getItems().remove((int) target.getValue());
+    }
+
+    return albumDao.updateAlbum(blogId, album) && albumDao.deleteMarkdown(blogId, item) ? item : null;
   }
 }
 

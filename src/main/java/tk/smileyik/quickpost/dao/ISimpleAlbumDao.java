@@ -17,4 +17,12 @@ public interface ISimpleAlbumDao {
    * @return 该博客下的所有文章集概要
    */
   List<SimpleAlbum> getAllSimpleAlbums(String blog);
+
+  boolean updateSimpleAlbums(String blog, List<SimpleAlbum> albums);
+
+  boolean addSimpleAlbum(String blog, SimpleAlbum simpleAlbum, String markdown);
+
+  boolean updateSimpleAlbum(String blog, SimpleAlbum simpleAlbum, String markdown);
+
+  boolean deleteSimpleAlbum(String blog, String simpleAlbumId);
 }

@@ -89,4 +89,32 @@ public class AlbumDaoImpl implements IAlbumDao {
     }
     return true;
   }
+
+  @Override
+  public String readMarkdown(String blogId, Item post) {
+    File markdownFile = new File(blogConfiguration.getMarkdownBase(blogId), post.getMarkdown());
+    if (markdownFile.exists() && markdownFile.isFile()) {
+      try {
+        String str = String.join(
+            "\n",
+            Files.readAllLines(markdownFile.toPath())
+        );
+        post.setPrev(str);
+        return str;
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public boolean deleteMarkdown(String blogId, Item post) {
+    File markdownFile = new File(blogConfiguration.getMarkdownBase(blogId), post.getMarkdown());
+    if (markdownFile.exists() && markdownFile.isFile()) {
+      readMarkdown(blogId, post);
+      return markdownFile.delete();
+    }
+    return false;
+  }
 }

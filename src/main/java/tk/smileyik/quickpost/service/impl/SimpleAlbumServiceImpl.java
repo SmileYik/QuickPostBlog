@@ -37,4 +37,19 @@ public class SimpleAlbumServiceImpl implements ISimpleAlbumService {
   public List<SimpleAlbum> getAllSimpleAlbums(String blog) {
     return simpleAlbumDao.getAllSimpleAlbums(blog);
   }
+
+  @Override
+  public boolean addSimpleAlbum(String blog, SimpleAlbum album, String markdown) {
+    return simpleAlbumDao.addSimpleAlbum(blog, album, markdown);
+  }
+
+  @Override
+  public boolean updateSimpleAlbum(String blog, SimpleAlbum album, String markdown) {
+    return simpleAlbumDao.updateSimpleAlbum(blog, album, markdown);
+  }
+
+  @Override
+  public boolean deleteSimpleAlbum(String blog, String album) {
+    return simpleAlbumDao.deleteSimpleAlbum(blog, album);
+  }
 }

@@ -29,4 +29,14 @@ public interface IAlbumDao {
   boolean addAlbum(String blogId, Album album);
 
   boolean writeDownMarkdown(String blogId, Item post);
+
+  String readMarkdown(String blogId, Item post);
+
+  /**
+   * 删除一篇文章的Markdown文件.
+   * @param blogId
+   * @param post
+   * @return
+   */
+  boolean deleteMarkdown(String blogId, Item post);
 }
