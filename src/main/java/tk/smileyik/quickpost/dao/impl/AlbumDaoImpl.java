@@ -68,6 +68,11 @@ public class AlbumDaoImpl implements IAlbumDao {
   @Override
   public boolean writeDownMarkdown(String blogId, Item post) {
     File markdownFile = new File(blogConfiguration.getMarkdownBase(blogId), post.getMarkdown());
+    File parentFile = markdownFile.getParentFile();
+    // create dir if it is not exist, if failed to create then return false
+    if (!parentFile.exists() && !parentFile.mkdirs()) {
+      return false;
+    }
     String markdownContent = post.getPrev();
     int tail = blogConfiguration.getPrevLength();
     if (tail > markdownContent.length()) {
