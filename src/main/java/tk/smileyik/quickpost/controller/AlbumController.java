@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.smileyik.quickpost.entity.Item;
 import tk.smileyik.quickpost.service.IAlbumService;
+import tk.smileyik.quickpost.service.INewestPostService;
 import tk.smileyik.quickpost.util.Result;
 
 import java.util.List;
@@ -18,10 +19,16 @@ import java.util.List;
 @RequestMapping("/album")
 public class AlbumController {
   private IAlbumService albumService;
+  private INewestPostService newestPostService;
 
   @Autowired
   public void setAlbumService(IAlbumService albumService) {
     this.albumService = albumService;
+  }
+
+  @Autowired
+  public void setNewestPostService(INewestPostService newestPostService) {
+    this.newestPostService = newestPostService;
   }
 
   /**
@@ -81,7 +88,8 @@ public class AlbumController {
       @PathVariable("idx") int idx,
       @RequestBody Item item
   ) {
-    boolean flag = albumService.post(blogId, albumId, item, includeByItem, idx);
+    boolean flag = albumService.post(blogId, albumId, item, includeByItem, idx) &&
+                   newestPostService.updateNewestPost(blogId, albumId, item);
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
 
@@ -102,7 +110,8 @@ public class AlbumController {
       @PathVariable("idx") int idx,
       @RequestBody Item item
   ) {
-    boolean flag = albumService.modifyPost(blogId, albumId, item, includeByItem, idx);
+    boolean flag = albumService.modifyPost(blogId, albumId, item, includeByItem, idx) &&
+                   newestPostService.updateNewestPost(blogId, albumId, item);
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
 
@@ -119,7 +128,8 @@ public class AlbumController {
       @PathVariable("albumId") String albumId,
       @RequestBody Item item
   ) {
-    boolean flag = albumService.modifyPost(blogId, albumId, item);
+    boolean flag = albumService.modifyPost(blogId, albumId, item) &&
+                   newestPostService.updateNewestPost(blogId, albumId, item);
     return new Result<>(flag, flag ? 200 : 500, flag + "", flag);
   }
 
@@ -129,7 +139,11 @@ public class AlbumController {
       @PathVariable("albumId") String albumId,
       @PathVariable("itemId") String itemId
   ) {
-    return new Result<>(albumService.deletePost(blogId, albumId, itemId));
+    Item item = albumService.deletePost(blogId, albumId, itemId);
+    if (item == null) {
+      return new Result<>(false, 500, "delete failed!", null);
+    }
+    return new Result<>(item);
   }
 
 

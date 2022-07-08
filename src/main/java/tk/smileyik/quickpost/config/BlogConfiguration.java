@@ -45,6 +45,10 @@ public class BlogConfiguration {
    * 文章预览字数.
    */
   private int prevLength = 100;
+  /**
+   * 展示的最新更新的文章数量.
+   */
+  private int newestPostSize = 5;
 
   public String getRoot() {
     return root;
@@ -114,6 +118,14 @@ public class BlogConfiguration {
 
   public int getPrevLength() {
     return prevLength;
+  }
+
+  public int getNewestPostSize() {
+    return newestPostSize;
+  }
+
+  public void setNewestPostSize(int newestPostSize) {
+    this.newestPostSize = newestPostSize;
   }
 
   @Override
